@@ -48,10 +48,42 @@ const OrderScreen = () => {
         }
     }, [order, paypal, paypalDispatch, loadingPayPal, errorPayPal]);
 
-    function onApprove (){};
-    function onApproveTest (){};
-    function onError (){};
-    function createOrder (){};
+    function onApprove (data, actions){
+        return actions.order.capture().then(async function(details){
+            try {
+               await payOrder({orderId, details});
+               refetch(); // once its paid it will change the message
+               toast.success('Payment successful');
+            } catch (err) {
+                toast.error(err?.data?.message || err.message);
+            }
+        }); 
+        //.then() is because it returns a promise check the paypal docs
+    };
+
+    async function onApproveTest (){
+        await payOrder({orderId, details:{ payer:{} }});
+        refetch(); // once its paid it will change the message
+        toast.success('Payment successful');
+    };
+
+    function onError (err){
+        toast.error(err.message);
+    };
+
+    function createOrder (data, actions){
+        return actions.order.create({
+            purchase_units: [
+                {
+                    amount: {
+                        value: order.totalPrice,
+                    },
+                }
+            ],
+        }).then((orderId)=>{
+            return orderId;
+        });
+    };
 
 
   return isLoading ? <Loader/> : error ? <Message variant="danger"/> : (
@@ -146,7 +178,7 @@ const OrderScreen = () => {
 
                                 {isPending ? <Loader /> : (
                                     <div>
-                                        <Button onClick={ onApproveTest } style={{marginBottom: '10px'}}>Test Pay Order</Button>
+                                        {/* <Button onClick={ onApproveTest } style={{marginBottom: '10px'}}>Test Pay Order</Button> */}
                                         <div>
                                             <PayPalButtons
                                                 createOrder={createOrder}
