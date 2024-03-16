@@ -26,9 +26,15 @@ export const ordersApiSlice = apiSlice.injectEndpoints({
                 body: {...details}
             })
         }),
-        getPayPalClientId : builder.query({
+        getPayPalClientId: builder.query({
             query: () => ({
                 url: PAYPAL_URL,
+            }),
+            keepUnusedDataFor: 5
+        }),
+        getMyOrders: builder.query({
+            query: () => ({
+                url: `${ORDERS_URL}/myorders`,
             }),
             keepUnusedDataFor: 5
         }),
@@ -36,4 +42,11 @@ export const ordersApiSlice = apiSlice.injectEndpoints({
 }); 
 //we are going to inject the orders to the api slice which is connected to the store
 
-export const { useCreateOrderMutation, useGetOrderDetailsQuery, usePayOrderMutation, useGetPayPalClientIdQuery } = ordersApiSlice;
+export const { 
+    useCreateOrderMutation, 
+    useGetOrderDetailsQuery, 
+    usePayOrderMutation, 
+    useGetPayPalClientIdQuery,
+    useGetMyOrdersQuery
+
+} = ordersApiSlice;

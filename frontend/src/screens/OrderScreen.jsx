@@ -58,12 +58,12 @@ const OrderScreen = () => {
                 toast.error(err?.data?.message || err.message);
             }
         }); 
-        //.then() is because it returns a promise check the paypal docs
+        //.then() is because it returns a promise check the paypal docs https://developer.paypal.com/tools/sandbox/
     };
 
     async function onApproveTest (){
         await payOrder({orderId, details:{ payer:{} }});
-        refetch(); // once its paid it will change the message
+        refetch(); 
         toast.success('Payment successful');
     };
 

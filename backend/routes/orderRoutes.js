@@ -13,7 +13,7 @@ import {
 
 router.route('/').post(protect, addOrderItems).get(protect, admin, getOrders); 
 
-router.route('/mine').get(protect, getMyOrders);
+router.route('/myorders').get(protect, getMyOrders);
 
 router.route('/:id').get(protect, getOrderById);
 
