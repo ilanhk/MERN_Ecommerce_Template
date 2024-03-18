@@ -24,7 +24,7 @@ const ProfileScreen = () => {
     const [updateProfile, { isLoading: loadingUpdateProfile }] = useProfileMutation();
 
     const { data: orders, isLoading, error} = useGetMyOrdersQuery();
-    console.log('my orders:', orders);
+
 
     useEffect(()=>{
         if(userInfo){
