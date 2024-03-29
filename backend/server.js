@@ -1,3 +1,4 @@
+import path from 'path'; //good to put built in node modules at the top
 import express from 'express'; // in package.json do "type": "module", to beable to import instead of cont require
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser'; // allows us to accesss req.cookies.jwt to get the token
@@ -7,6 +8,7 @@ import { notFound, errorHandler } from './middleware/errorMiddleware.js';
 import productRoutes from './routes/productRoutes.js';
 import userRoutes from './routes/userRoutes.js'
 import orderRoutes from './routes/orderRoutes.js'
+import uploadRoutes from './routes/uploadRoutes.js'
 
 
 const port = process.env.PORT || 5000;
@@ -34,12 +36,15 @@ app.use('/api/users', userRoutes);
 
 app.use('/api/orders', orderRoutes);
 
+app.use('/api/upload', uploadRoutes);
+
 
 app.get('/api/config/paypal', (req, res) => res.send({ clientId:process.env.PAYPAL_CLIENT_ID }));
 
 
 
-
+const __dirname = path.resolve(); //Set dirname to current directory
+app.use('/uploads', express.static(path.join(__dirname, '/uploads'))); //making '/uploads' static folder
 
 
 app.use(notFound);
