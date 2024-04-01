@@ -46,6 +46,14 @@ export const productsApiSlice = apiSlice.injectEndpoints({
                 method: 'DELETE',
             }),
         }),
+        createReview:builder.mutation({
+            query: (data)=>({
+                url: `${PRODUCTS_URL}/${data.productId}/reviews`,
+                method: 'POST',
+                body: data,
+            }),
+            invalidatesTags: ['Product'],
+        }),
     }), 
     // any endpoints that have to do with products will go into the builder obj
 
@@ -58,6 +66,7 @@ export const {
     useUpdateProductMutation,
     useUploadProductImageMutation,
     useDeleteProductMutation, 
+    useCreateReviewMutation,
 } = productsApiSlice; // convention to add use and Query to the endpoint in this case getProducts
 // we can use useGetProductsQuery to fetch our products data
 // when using apiSlice we need to follow convention for each reducer of productsApiSlice since its a child of apiSlice
