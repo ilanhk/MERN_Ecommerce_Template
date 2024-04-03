@@ -4,6 +4,7 @@ import { FaShoppingCart, FaUser } from 'react-icons/fa';
 import { LinkContainer } from 'react-router-bootstrap';
 import { useSelector, useDispatch } from 'react-redux'; //to select anything from the global state
 import { useLogoutMutation } from '../slices/usersApiSlice';
+import SearchBox from './SearchBox';
 import { logout } from '../slices/authSlice';
 import logo from '../assets/logo.png';
 
@@ -43,6 +44,7 @@ return (
                 <Navbar.Toggle aria-controls='basic-navbar-nav' />
                 <Navbar.Collapse id='basic-navbar-nav'>
                     <Nav className='ms-auto'>
+                        <SearchBox />
                         <LinkContainer to="/cart">
                             <Nav.Link>
                                 <FaShoppingCart />

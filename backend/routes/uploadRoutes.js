@@ -13,30 +13,36 @@ const storage = multer.diskStorage({
 });
 //need storage to tell where img to go. We can use amazonBuckets or diskStorage(on the server) ...
 
-function checkFileType(file, cb){
-    const fileTypes = /jpg|jpeg|png/;
-    const extname = fileTypes.test(path.extname(file.originalname).toLowerCase());
-    const mimeType = fileTypes.test(file.mimeType);
+function fileFilter(req, file, cb) {
+    const filetypes = /jpe?g|png|webp/;
+    const mimetypes = /image\/jpe?g|image\/png|image\/webp/;
+  
+    const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
+    const mimetype = mimetypes.test(file.mimetype);
+  
+    if (extname && mimetype) {
+      cb(null, true);
+    } else {
+      cb(new Error('Images only!'), false);
+    }
+  }
 
-    if (extname && mimeType){
-        return cb(null, true);
-    } else{
-        cb('Images only!') //first arg in db is null which is an error. Here we are returning the error
-    };
+  const upload = multer({ storage, fileFilter }); //this is the function how to upload the img
+  const uploadSingleImage = upload.single('image');
 
-};
 
-const upload = multer({
-    storage,
-});
-//this is the function how to upload the img
-
-router.post('/', upload.single('image'), (req, res)=> {
-    res.send({
-        message: 'Image uploaded',
-        image: `/${req.file.path}`
-    })
-}); 
+  router.post('/', (req, res) => {
+    uploadSingleImage(req, res, function (err) {
+      if (err) {
+        res.status(400).send({ message: err.message });
+      }
+  
+      res.status(200).send({
+        message: 'Image uploaded successfully',
+        image: `/${req.file.path}`,
+      });
+    });
+  }); 
 // upload.single('image') is the middleware we are using .single('image') means uploading a single img
 //  in .single()  'image' its the fieldname hence ${file.fieldname} you can call the field name anything
 //the actuall upload is handled by the middleware so dont have do do much to res

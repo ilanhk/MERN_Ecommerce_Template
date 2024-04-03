@@ -67,11 +67,11 @@ const OrderScreen = () => {
         //.then() is because it returns a promise check the paypal docs https://developer.paypal.com/tools/sandbox/
     };
 
-    async function onApproveTest (){
-        await payOrder({orderId, details:{ payer:{} }});
-        refetch(); 
-        toast.success('Payment successful');
-    };
+    // async function onApproveTest (){
+    //     await payOrder({orderId, details:{ payer:{} }});
+    //     refetch(); 
+    //     toast.success('Payment successful');
+    // };
 
     function onError (err){
         toast.error(err.message);

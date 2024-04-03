@@ -5,8 +5,21 @@ import Product from '../models/productModel.js';
 // @route GET /api/products
 // @access Public
 const getProducts = asyncHandler(async (req, res) => {
-    const products = await Product.find({}); // {} in find will get all of them
-    res.json(products);
+    const pageSize = 8;
+    const page = Number(req.query.pageNumber) || 1;
+
+    const keyword = req.query.keyword ? { name: { $regex: req.query.keyword, $options: 'i' }} : {};
+    // { $regex: req.query.keyword, $options: 'i' } use regular expression instead on matching it directy so if type keyword 'phone' it will give us 'iphone 10', 
+    //$options: 'i' means case insensative
+
+    const count = await Product.countDocuments({...keyword}); // countDocuments() is a mongoose method. In this case it will count how much products in the db
+    
+    //we want to limit the count if there is a keyword same with Product.find({...keyword})
+
+    const products = await Product.find({...keyword}) // {} in find will get all of them
+        .limit(pageSize)
+        .skip(pageSize * (page - 1));
+    res.json({products, page, pages: Math.ceil(count / pageSize)}); // Math.ceil is to round up
 });
 // need to use async because getting data from the DB
 
@@ -134,6 +147,15 @@ const createProductReview = asyncHandler(async (req, res) => {
 });
 
 
+// @desc Get top rated products
+// @route GET /api/products/top
+// @access Public
+const getTopProducts = asyncHandler(async (req, res) => {
+    const products = await Product.find({}).sort({rating: -1}).limit(3);
+    res.status(200).json(products);
+});
+
+
 
 export { 
     getProducts, 
@@ -142,4 +164,5 @@ export {
     updateProduct, 
     deleteProduct, 
     createProductReview,
+    getTopProducts,
 };

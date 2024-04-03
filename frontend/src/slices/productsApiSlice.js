@@ -4,8 +4,12 @@ import { apiSlice } from "./apiSlice";
 export const productsApiSlice = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
         getProducts : builder.query({
-            query: ()=> ({
+            query: ({ keyword, pageNumber })=> ({
                 url: PRODUCTS_URL,
+                params: {
+                    keyword,
+                    pageNumber,
+                },
             }),
             providesTags: ['Product'], //if not we would need to refresh the page
             keepUnusedDataFor: 5 //5 seconds
@@ -54,6 +58,12 @@ export const productsApiSlice = apiSlice.injectEndpoints({
             }),
             invalidatesTags: ['Product'],
         }),
+        getTopProducts: builder.query({
+            query: ()=>({
+                url: `${PRODUCTS_URL}/top`,
+            }),
+            keepUnusedDataFor: 5,
+        }),
     }), 
     // any endpoints that have to do with products will go into the builder obj
 
@@ -67,6 +77,8 @@ export const {
     useUploadProductImageMutation,
     useDeleteProductMutation, 
     useCreateReviewMutation,
-} = productsApiSlice; // convention to add use and Query to the endpoint in this case getProducts
+    useGetTopProductsQuery,
+} = productsApiSlice; 
+// convention to add use and Query to the endpoint in this case getProducts
 // we can use useGetProductsQuery to fetch our products data
 // when using apiSlice we need to follow convention for each reducer of productsApiSlice since its a child of apiSlice
