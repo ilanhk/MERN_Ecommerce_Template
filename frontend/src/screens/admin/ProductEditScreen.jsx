@@ -24,7 +24,7 @@ const ProductEditScreen = () => {
     const [countInStock, setCountInStock] = useState(0);
     const [description, setDescription] = useState('');
 
-    const { data: product, isLoading, error } = useGetProductDetailsQuery(productId);
+    const { data: product, isLoading ,error } = useGetProductDetailsQuery(productId);
     
     const [ updateProduct, { isLoading: loadingUpdate }] = useUpdateProductMutation();
 
@@ -67,14 +67,31 @@ const ProductEditScreen = () => {
 
     const uploadFileHandler = async (e)=>{
         const formData = new FormData();
-        formData.append('image', e.target.files[0]) // e.target.files[0] its an array. BC we are uploading one file we just need the first one
+
         
+        const allowedFileTypes = ['image/jpeg', 'image/png' , 'image/webp'];
+
+        const file = e.target.files[0]; // e.target.files[0] its an array. BC we are uploading one file we just need the first one
+        console.log('file:', file);
+
+        if (file && !allowedFileTypes.includes(file.type)) {
+            toast.error('Invalid file type. Please select a valid file type.');
+            // Reset file input
+            setImage('');
+
+            e.target.value = null;
+            return;
+        };
+
+        
+        formData.append('image', file) 
+       
+
         try {
            const res = await uploadProductImage(formData).unwrap();
            toast.success(res.message); //res.message is from the middleware created
            setImage(res.image);
         } catch (err) {
-            setImage('');
             toast.error( err?.data?.message || err.message );
             
         };
@@ -89,7 +106,7 @@ const ProductEditScreen = () => {
             <h1>Edit Product</h1>
             {loadingUpdate && <Loader/>}
 
-            {isLoading ? <Loader/> : error? <Message variant='danger'>{error}</Message> : (
+            {isLoading ? <Loader/> : error? <Message variant='danger'>{error.data.message}</Message> : (
                 <Form onSubmit={ submitHandler }>
                     <Form.Group controlId="name" className="my-2">
                         <Form.Label>Name</Form.Label>

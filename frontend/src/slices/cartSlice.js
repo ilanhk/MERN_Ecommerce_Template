@@ -43,6 +43,7 @@ const cartSlice = createSlice({
             state.cartItems = [];
             return updateCart(state);
         },
+        resetCart: ( state ) => ( state = initialState )
     },
 });
 // createSlice() takes in a object
@@ -55,6 +56,7 @@ export const {
     saveShippingAddress, 
     savePaymentMethod, 
     clearCartItems,
+    resetCart,
 } = cartSlice.actions; //bc we are using createSlice we can export the reducers like this
 
 
