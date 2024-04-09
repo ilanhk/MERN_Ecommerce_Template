@@ -24,11 +24,6 @@ app.use(express.urlencoded({ extended: true }));
 //Cookie parser middleware
 app.use(cookieParser());
 
-// First route
-app.get('/', (req, res)=>{
-    res.send('API is running')
-});
-
 
 app.use('/api/products', productRoutes); //anytime we hit '/api/products' it will use the routes in productRoutes
 
@@ -45,6 +40,20 @@ app.get('/api/config/paypal', (req, res) => res.send({ clientId:process.env.PAYP
 
 const __dirname = path.resolve(); //Set dirname to current directory
 app.use('/uploads', express.static(path.join(__dirname, '/uploads'))); //making '/uploads' static folder
+
+if(process.env.NODE_ENV === 'production'){
+    // set static folder
+    app.use(express.static(path.join(__dirname, '/frontend/build')));
+
+    //any route that is not api will be redirected to index.html
+    app.get('*', (req, res)=> res.sendFile(path.resolve(__dirname, 'frontend', 'build', 'index.html')));
+    //load the 'index.html' that would be in the frontend build folder
+} else {
+    // First route
+    app.get('/', (req, res)=>{
+        res.send('API is running')
+    });
+};
 
 
 app.use(notFound);
