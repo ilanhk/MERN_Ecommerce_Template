@@ -10,6 +10,7 @@ import userRoutes from './routes/userRoutes.js'
 import orderRoutes from './routes/orderRoutes.js'
 import uploadRoutes from './routes/uploadRoutes.js'
 
+//good to add CORS to restrict domains for credentials
 
 const port = process.env.PORT || 5000;
 
@@ -18,11 +19,11 @@ connectDB(); //to connect to MongoDB
 const app = express(); 
 
 //Body parser middleware
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json()); //for json
+app.use(express.urlencoded({ extended: true })); //for form data
 
 //Cookie parser middleware
-app.use(cookieParser());
+app.use(cookieParser()); //can save in express session also 
 
 
 app.use('/api/products', productRoutes); //anytime we hit '/api/products' it will use the routes in productRoutes
@@ -42,8 +43,8 @@ const __dirname = path.resolve(); //Set dirname to current directory
 app.use('/uploads', express.static(path.join(__dirname, '/uploads'))); //making '/uploads' static folder
 
 if(process.env.NODE_ENV === 'production'){
-    // set static folder
-    app.use(express.static(path.join(__dirname, '/frontend/build')));
+    // set static folder for production build (serve the frontend)
+    app.use(express.static(path.join(__dirname, '/frontend/build')));  
 
     //any route that is not api will be redirected to index.html
     app.get('*', (req, res)=> res.sendFile(path.resolve(__dirname, 'frontend', 'build', 'index.html')));

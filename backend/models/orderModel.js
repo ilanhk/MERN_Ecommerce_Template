@@ -1,5 +1,7 @@
 import mongoose from "mongoose";
 
+//Should make a cart model with relationship with user
+
 const orderSchema = mongoose.Schema({
     user: {
         type: mongoose.Schema.Types.ObjectId,

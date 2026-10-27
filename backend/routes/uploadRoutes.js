@@ -3,6 +3,8 @@ import express from 'express';
 import multer from 'multer';
 const router = express.Router();
 
+//instead of saving the uploads locally save it in AWS S3 Bucket
+
 const storage = multer.diskStorage({
     destination(req, file, cb){
         cb(null, 'uploads/'); //cb is the callback, null is error and 'uploads/' is where we want the img to go to a folder called uploads in the root
