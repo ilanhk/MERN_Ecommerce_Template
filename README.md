@@ -1,12 +1,12 @@
-<<<<<<< HEAD
-Need node version 18 or above. 
-Its been deployed here is the link: https://mern-ecommerce-template.onrender.com/
-=======
 # MERN E-Commerce Store
 
 A full-stack e-commerce application built with MongoDB, Express, React, and Node.js. Customers can browse and search a product catalog, manage a cart, place orders, and pay through PayPal. An admin area provides tools to manage products, users, and orders.
 
 **Live demo:** [MERN Shop Template](https://mern-ecommerce-template.onrender.com/)
+*(Hosted on Render's free tier, so the first load may take about a minute while the server wakes up.)*
+
+<img width="1894" height="880" alt="image" src="https://github.com/user-attachments/assets/2185a04d-27ca-4fde-b887-8e8b99bf79bc" />
+
 
 ## Features
 
@@ -18,6 +18,13 @@ A full-stack e-commerce application built with MongoDB, Express, React, and Node
 - Product image uploads
 - REST API backed by MongoDB and Mongoose
 - Responsive React interface with Redux Toolkit and RTK Query
+
+## What I built
+
+- Built the checkout flow with **server-side PayPal verification**, so payment status is confirmed by the API rather than trusted from the client.
+- Implemented authentication with **JWTs stored in HTTP-only cookies** and bcrypt-hashed passwords, plus role-based access for admin routes.
+- Managed app state with **Redux Toolkit and RTK Query** for cached, consistent API data.
+- Deployed the full stack to Render with a hosted MongoDB database.
 
 ## Technology
 
@@ -93,7 +100,10 @@ npm run dev
 
 The storefront is available at [http://localhost:3000](http://localhost:3000). The Express API runs at [http://localhost:5000](http://localhost:5000); the frontend development server proxies API requests to it. You can also start each process separately with `npm run server` and `npm run client`.
 
-## Useful scripts
+## Reference
+
+<details>
+<summary><strong>Useful scripts</strong></summary>
 
 Run these commands from the repository root unless noted otherwise.
 
@@ -110,7 +120,10 @@ Run these commands from the repository root unless noted otherwise.
 
 For production, set `NODE_ENV=production`, configure the environment variables, build the frontend, then run `npm start`. The Express server serves the built frontend from `frontend/build`.
 
-## Application structure
+</details>
+
+<details>
+<summary><strong>Application structure</strong></summary>
 
 ```text
 backend/
@@ -129,7 +142,10 @@ frontend/
 uploads/         Locally uploaded product images
 ```
 
-## API overview
+</details>
+
+<details>
+<summary><strong>API overview</strong></summary>
 
 | Endpoint | Purpose |
 | --- | --- |
@@ -149,4 +165,5 @@ uploads/         Locally uploaded product images
 | `/api/config/paypal` | Get the PayPal client ID for checkout |
 
 Most order and account endpoints require authentication. Product, user, and delivery-management endpoints also enforce admin access where appropriate.
->>>>>>> fc1aad7 (readme added)
+
+</details>
